@@ -1,0 +1,259 @@
+\setuplayout[topspace=0.5in, backspace=0.5in, header=24pt, footer=36pt,
+  height=middle, width=middle]
+\setupfooter[style=\it]
+\setuppagenumbering[location={header,right}]
+\setupbodyfont[11pt]
+
+\starttext
+
+\title{Theoretical Basics}
+
+This chapter gives brief intro to
+\startitemize[-]
+\item Margin Maximization Method
+\item Linear Support Vector Machine
+\item Primal/Dual Problems
+\item Soft Margin Maximization
+\stopitemize
+
+\subject{Margin Maximization Method}
+
+Suppose we have a binary separable data set
+\startformula
+T = \{(\bold{x_1}, y_1), (\bold{x_2}, y_2), .. (\bold{x_n}, y_n)\}
+\stopformula
+\startformula
+x_i \in \bold{R^n}
+\stopformula
+\startformula
+y_i \in \{+1, -1\}
+\stopformula
+We are finding a hyperplane $\omega^Tx + b = 0$ that separates points $x_i$ in the feature space.
+Points to the side of normal vector pointing to is assigned positive label, vise versa.
+
+We attempt to find the best $\omega$ and $\bold{b}$ (noted as $\bold{\omega^*}$ and $b^*$) that maximize the minimal margin to the hyperplane of all points.
+
+\subject{Geometric Margin}
+Recall that we can define a hyperplane (with no bias) in geometric context:
+
+Given a normal vector $\omega$, any point $x$ is one the hyperplane if and only if its corresponding vector $\bold{x}$ is orthogonal to the normal vector. i.e.
+\startformula
+\omega^T\bold{x} = 0
+\stopformula
+If we add a bias term $b$, the hyperplane
+\startformula
+\omega^Tx + b = 0
+\stopformula
+is explained as:
+
+Given a normal vector $\omega$, any point $x$ is one the hyperplane if and only if the length of the projection of its corresponding vector $\bold{x}$ on the normal vector $\omega$ is $-b'$ (positive if $cos(\theta)$ is positive). i.e.
+\startformula
+\frac{\omega^T\bold{x}}{||\omega||_2} = -b'
+\stopformula
+We can scale $b'$ by $||\omega||_2$ and obtain $b$.
+
+The distance of any point $x_i$ to hyperplane $\omega^Tx + b = 0$ is
+\startformula
+\gamma_i = ||\frac{\omega^Tx_i}{||\omega||_2} + \frac{b}{||\omega||_2}||_2
+\stopformula
+
+For any point $x_i$ in T,
+\startformula
+|| \omega^Tx_i + b || = y_i(\omega^Tx_i + b)
+\stopformula
+
+Thus\omega
+\startformula
+\gamma_i = y_i(\frac{\omega^Tx_i}{||\omega||_2} + \frac{b}{||\omega||_2})
+\stopformula
+
+\subject{Primal Problem}
+Definition:
+\startformula
+\max_{\omega, b} \gamma
+\stopformula
+\startformula
+\gamma = \min_{i = 1,...,N}\gamma_i
+\stopformula
+i.e.
+\startformula
+\max_{\omega, b} \gamma
+\stopformula
+\startformula
+y_i(\frac{\omega^Tx_i}{||\omega||_2} + \frac{b}{||\omega||_2}) \ge \gamma
+\stopformula
+Rearranged:
+\startformula
+\max_{\omega, b} \frac{\gamma||\omega||_2}{||\omega||_2}
+\stopformula
+\startformula
+y_i(\omega^Tx_i + b) \ge \gamma||\omega||_2
+\stopformula
+
+Note that $\gamma_i||\omega||_2 = ||\omega^Tx_i + b||_2$ is proportional to $\omega$ and $b$, and $\gamma_i||\omega||_2$ is the only constraint parameter in the inequality, we can set  $\gamma_i||\omega||_2 = 1$ to obtain:
+\startformula
+\max_{\omega} \frac{1}{||\omega||_2}
+\stopformula
+\startformula
+y_i(\omega^Tx_i + b) \ge 1
+\stopformula
+i.e.
+\startformula
+\min_{\omega} \frac{1}{2}||\omega||_2
+\stopformula
+\startformula
+y_i(\omega^Tx_i + b) - 1\ge 0
+\stopformula
+Which is a standard convex quadratic programming problem.
+If it has solution, the margin distance is $\frac{2}{||\omega||_2}$ and the data points of the minimum distance to the hyperplane are called \bold{support vectors}.
+
+\subject{Lagrange Dual Function}
+Consider the following nonlinear minimization or maximization problem:
+
+Optimize
+\startformula
+\min_xf(x)
+\stopformula
+subject to
+\startformula
+{\displaystyle g_{i}(x^{*})\leq 0,{\text{ for }}i=1,\ldots ,m}
+\stopformula
+\startformula
+{\displaystyle h_{j}(x^{*})=0,{\text{ for }}j=1,\ldots ,\ell \,\!}
+\stopformula
+The Lagrange function is defined as follows
+\startformula
+g: \bold{R}^m \times \bold{R}^\ell \rightarrow \bold{R}
+\stopformula
+\startformula
+g(\mu, \lambda) = \inf_{x \in D} L(x, \mu, \lambda)
+\stopformula
+\startformula
+= \inf_{x \in D} (f(x) + \sum_{i=1}^m\mu_ig_i(x) + \sum_{j=1}^{\ell}\lambda_jh_j(x))
+\stopformula
+$g$ is concave, can be $-\infty$ for some $\mu$, $\lambda$
+
+
+\bold{Lower bound property} If $\mu_i \geq 0$, then $g(\mu, \lambda) \leq p^*$, $p^*$ is the optimal value of the primal problem. Denote the optimal value of dual problem is $d^*$, we have
+\startformula
+d^* = \max_{\mu, \lambda}\min_xL(x, \mu,\lambda) \leq \min_x\max_{\mu, \lambda}L(x, \mu,\lambda) = p^*
+\stopformula
+
+
+\bold{Strong duality} $d^* = p^*$ usually holds for convex problems. conditions that guarantee strong duality in convex problems are called \bold{constraint qualifications}.
+
+\subject{Karush-Kuhn-Tucker Conditions}
+\bold{Necessary conditions} Suppose $f$ and $g_i$ are continuously differentiable at a point $x^*$. If $x^*$ is a local optimum and the optimization problem satisfies some regularity conditions below, then there exist constants $\mu_i$ and $\lambda_j$, called KKT multipliers, such that
+\startformula
+{\displaystyle g_{i}(x^{*})\leq 0,{\text{ for }}i=1,\ldots ,m}
+\stopformula
+\startformula
+{\displaystyle h_{j}(x^{*})=0,{\text{ for }}j=1,\ldots ,\ell \,\!}
+\stopformula
+\startformula
+{\displaystyle -\nabla f(x^{*})=\sum _{i=1}^{m}\mu _{i}\nabla g_{i}(x^{*})+\sum _{j=1}^{\ell }\lambda _{j}\nabla h_{j}(x^{*}),}
+\stopformula
+\startformula
+{\displaystyle \mu _{i}\geq 0,{\text{ for }}i=1,\ldots ,m}
+\stopformula
+\startformula
+{\displaystyle \mu _{i}g_{i}(x^{*})=0,{\text{ for }}\;i=1,\ldots ,m.}
+\stopformula
+\bold{Sufficient conditions} In linear optimization problems, the necessary conditions are also sufficient for optimality.
+\subject{Dual Problem}
+
+By introducing the KKT multipliers $a_i \ge 0, i = 1,...,N$ for every inequality, define the Lagrange function:
+\startformula
+L(\omega, b, \alpha) = \frac{1}{2}||\omega||_2^2 - (\sum^N_{i=1}\alpha_iy_i(\omega^Tx + b) - \sum^N_{i=1}\alpha_i)
+\stopformula
+The dual of the primal problem is
+\startformula
+\max_\alpha\min_{\omega, b}L(\omega, b, \alpha)
+\stopformula
+Calculate the partial derivatives and assign it to 0
+\startformula
+\nabla_\omega L(\omega, b, \alpha) = \omega - \sum_{i=1}^N \alpha_i y_i x_i = 0
+\stopformula
+\startformula
+\nabla_b L(\omega, b, \alpha) = \sum_{i=1}^N \alpha_i y_i = 0
+\stopformula
+By substituting $\omega$, we obtain the dual problem
+\startformula
+\min_\alpha \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j(x_i^Tx_j) - \sum_{i=1}^N \alpha_i
+\stopformula
+\startformula
+\sum_{i=1}^N\alpha_iy_i = 0
+\stopformula
+\startformula
+\alpha_i \geq 0, \text{    for    } i = 1,\ldots ,N
+\stopformula
+According to KKT condition, in the SVM primal problem, $f(x)$ and $g(x)$ is convex, $h(x)$ is affine. Thus KKT can be satisfied, and $d^* = p^*$. The optimal of dual problem is also the optimal of primal problem.
+
+\subject{Kernel Method}
+Sometimes the data point distribution is not linear in input space. Sometimes by proper modeling, it could be linear after applying some mapping to another feature space.
+\startformula
+\phi(x) = \chi \rightarrow H
+\stopformula
+Apply the mapping to the dual form
+\startformula
+\min_\alpha \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j(\phi(x_i)^T\phi(x_j)) - \sum_{i=1}^N \alpha_i
+\stopformula
+\startformula
+\sum_{i=1}^N\alpha_iy_i = 0
+\stopformula
+\startformula
+\alpha_i \geq 0, \text{    for    } i = 1,\ldots ,N
+\stopformula
+Define kernel function
+\startformula
+K(x, z) = \phi(x)^T\phi(z)
+\stopformula
+Then mapping function is substituted
+\startformula
+\min_\alpha \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(x_i, x_j) - \sum_{i=1}^N \alpha_i
+\stopformula
+\startformula
+\sum_{i=1}^N\alpha_iy_i = 0
+\stopformula
+\startformula
+\alpha_i \geq 0, \text{    for    } i = 1,\ldots ,N
+\stopformula
+The necessary and sufficient conditions of that a symmetry mapping $K: \chi \times \chi \rightarrow \bold{R}$ can be a kernel function is that for $\forall x_i \in \chi, i = 1,\ldots, m$, the Gram Matrix of $K$
+\startformula
+K = [K(x_i, x_j)]_{m\times m}
+\stopformula
+is positive semidefinite.
+In practice, we use Mercer's Theorem to obtain a more restrictive Mercer Kernel.
+
+Or, we can design new kernels from existing kernels, such that $K_1: \chi \times \chi \rightarrow \bold{R}$ and $K_2: \chi \times \chi \rightarrow \bold{R}$ are kernels, functions below are also kernels
+\startformula
+K(x, z) = \alpha_1K_1(x, z)K_2(x, z) + \alpha_2K_1(x, z) + \alpha_3K_2(x, z) + \alpha_4f(x)f(z) + \alpha_5
+\stopformula
+\startformula
+f: \chi \rightarrow \bold{R}
+\stopformula
+\startformula
+\alpha_i \in \bold{R}^+
+\stopformula
+Or,
+\startformula
+K(x, z) = (K_1, (x, z) + \theta_1)^{\theta_2}, \theta_1 \in \bold{R}^+, \theta_2 \in \bold{N}
+\stopformula
+Or,
+\startformula
+K(x, z) = \exp(\frac{K_1(x, z)}{\sigma^2}), \sigma \in \bold{R}^+
+\stopformula
+Or,
+\startformula
+K(x, z) = \exp(-\frac{K_1(x, x) - 2K_1(x, z) + K_1(z, z)}{2\sigma^2}), \sigma \in \bold{R}^+
+\stopformula
+Or,
+\startformula
+K(x, z) = \frac{K_1(x, z)}{\sqrt{K_1(x, x)K_1(z, z)}}
+\stopformula
+
+
+
+\subject{Soft Margin}
+
+\stoptext
