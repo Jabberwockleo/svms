@@ -252,8 +252,55 @@ Or,
 K(x, z) = \frac{K_1(x, z)}{\sqrt{K_1(x, x)K_1(z, z)}}
 \stopformula
 
-
-
 \subject{Soft Margin}
+We often encounter such data points that can be simply evaluated with linear models but the data set itself is not linearly separable, e.g. noise points. By adding a slack variable $\xi$ and penalty term $C$, original primal problem is modified to
+\startformula
+\min_{\omega, b,\xi} \frac{1}{2}||\omega||^2_2+ C\sum^N_{i=1}\xi_i
+\stopformula
+\startformula
+\text{s.t.       } y_i(\omega^Tx_i + b) \geq 1 - \xi_i, i = 1,\ldots,N
+\stopformula
+\startformula
+\xi_i \geq 0
+\stopformula
+It's noteworthy that some algorithms use quadratic form $\xi^2$ as the slack variable.
+
+
+As it is still a convex minimization problem, by apply the KKT condition, the dual form can be obtained
+\startformula
+\min_\alpha \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j(x_i^Tx_j) - \sum_{i=1}^N \alpha_i
+\stopformula
+\startformula
+\sum_{i=1}^N\alpha_iy_i = 0
+\stopformula
+\startformula
+C \geq \alpha_i \geq 0, \text{    for    } i = 1,\ldots ,N
+\stopformula
+Compared to the hard margin dual problem:
+\startformula
+\min_\alpha \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j(x_i^Tx_j) - \sum_{i=1}^N \alpha_i
+\stopformula
+\startformula
+\sum_{i=1}^N\alpha_iy_i = 0
+\stopformula
+\startformula
+\alpha_i \geq 0, \text{    for    } i = 1,\ldots ,N
+\stopformula
+The two problem has the same representation of $\omega^*$ and $b^*$ to the primal problem solution
+\startformula
+\omega^* = \sum^N_{i = 1} \alpha^*_iy_ix_i
+\stopformula
+\startformula
+b^* = y_i - \sum^N_{i=1}\alpha^*_iy_i(x_i^Tx_j)
+\stopformula
+
+
+The dual problem is rid of the slack variable $\xi$, and we can derive the hard margin form by setting the penalty term $C \rightarrow +\infty$ in the target equation of the soft margin form.
+
+
+But most interestingly, by adding a slack variable to the primal problem we make the problem more "soft" -- however, in the dual problem -- the penalty $C$ is taken as the upper bound of $a_i$, which means, the higher the penalty, the larger the feasible range of $a_i$.
+
+One might raise a question: Why should we add that $C$ in the soft margin dual problem?
+The answer is, if the data set is not linearly separable, the unconstraint $\alpha$ will make negative infinity of target function $\min f(x) \rightarrow -\infty$.
 
 \stoptext
