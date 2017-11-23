@@ -13,6 +13,7 @@ This chapter gives brief intro to
 \item Margin Maximization Method
 \item Linear Support Vector Machine
 \item Primal/Dual Problems
+\item Kernel Method
 \item Soft Margin Maximization
 \stopitemize
 
@@ -62,7 +63,7 @@ For any point $x_i$ in T,
 || \omega^Tx_i + b || = y_i(\omega^Tx_i + b)
 \stopformula
 
-Thus\omega
+Thus
 \startformula
 \gamma_i = y_i(\frac{\omega^Tx_i}{||\omega||_2} + \frac{b}{||\omega||_2})
 \stopformula
@@ -294,7 +295,6 @@ The two problem has the same representation of $\omega^*$ and $b^*$ to the prima
 b^* = y_i - \sum^N_{i=1}\alpha^*_iy_i(x_i^Tx_j)
 \stopformula
 
-
 The dual problem is rid of the slack variable $\xi$, and we can derive the hard margin form by setting the penalty term $C \rightarrow +\infty$ in the target equation of the soft margin form.
 
 
@@ -302,5 +302,27 @@ But most interestingly, by adding a slack variable to the primal problem we make
 
 One might raise a question: Why should we add that $C$ in the soft margin dual problem?
 The answer is, if the data set is not linearly separable, the unconstraint $\alpha$ will make negative infinity of target function $\min f(x) \rightarrow -\infty$.
+
+\subject{Hinge loss function perspective}
+The target function can be introduced by hinge loss function
+\startformula
+J(\theta) = [1 - \theta]_+
+\stopformula
+by assigning
+\startformula
+\theta_i = y_i(\omega^Tx_i + b)
+\stopformula
+and appending a weight decay (the squared $L^2$ norm of $||\omega||_2$)
+\startformula
+J(\omega, b) = \sum^N_{i=1}[1-y_i(\omega^Tx_i + b)]_+ + \lambda ||\omega||_2
+\stopformula
+Which is same as the primal problem of soft margin SVM. ($\xi_i = [1-y_i(\omega^Tx_i + b)]_+$).
+
+
+Let $\lambda \rightarrow 0$, obtain the equality of the generalized hard margin form.
+
+
+\bold{About weight decay} As mentioning about the weight decay -- if we are working on a polynomial regression (free dimension is sufficient) with no weight decay. The \bold{Moore-Penrose pseudo-inverse} will get the a solution with minimal $||\omega||_2$, and minimum $||Ax - y||_2$ if no perfect match can be found (hypothesis space is small).
+
 
 \stoptext
