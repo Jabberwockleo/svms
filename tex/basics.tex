@@ -190,6 +190,17 @@ By substituting $\omega$, we obtain the dual problem
 \stopformula
 According to KKT condition, in the SVM primal problem, $f(x)$ and $g(x)$ is convex, $h(x)$ is affine. Thus KKT can be satisfied, and $d^* = p^*$. The optimal of dual problem is also the optimal of primal problem.
 
+Denote $f^*(x) = \omega^* + b^*$ is the optimal SVM solution. If the KKT is met (solution is obtained). Then, for $\forall x_i \in T$ 
+\startformula
+\alpha_i \eq 0 \Leftrightarrow y_if^*(x_i) \geq 1
+\stopformula
+\startformula
+0 \leq \alpha_i \leq C \Leftrightarrow y_if^*(x_i) \eq 1
+\stopformula
+\startformula
+\alpha_i \eq C \Leftrightarrow y_if^*(x_i) \leq 1
+\stopformula
+
 \subject{Kernel Method}
 Sometimes the data point distribution is not linear in input space. Sometimes by proper modeling, it could be linear after applying some mapping to another feature space.
 \startformula
