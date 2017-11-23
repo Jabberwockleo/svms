@@ -1,0 +1,39 @@
+\setuplayout[topspace=0.5in, backspace=0.5in, header=24pt, footer=36pt,
+  height=middle, width=middle]
+\setupfooter[style=\it]
+\setupfootertexts[\hfill https://github.com/Jabberwockleo]
+\setuppagenumbering[location={header,right}]
+\setupbodyfont[11pt]
+
+\starttext
+
+\title{Sequential Minimal Optimization}
+
+\subject{Overview}
+SMO is a milestone fast solver invented in [J. Platt 1998]. The most prominent contributions are
+\startitemize
+\item Solves sub-problems analytically, rid of the numerical QP solver library (less susceptible to numerical precision problem, compared to the original Vapnik chunking algorithm).
+\item Training time scales between $O(n)$ and $O(n^2)$ in the data set size.
+\stopitemize
+
+\subject{Algorithm In Brief}
+There are two components to SMO
+\startitemize 
+\item An analytic method for solving for the two Lagrange multipliers.
+\item A heuristic for choosing which multipliers to optimize.
+\stopitemize
+
+Recall the deduction that if the KKT is met (solution is obtained). Then, for $\forall x_i \in T$ 
+\startformula
+\alpha_i \eq 0 \Leftrightarrow y_if^*(x_i) \geq 1
+\stopformula
+\startformula
+0 \leq \alpha_i \leq C \Leftrightarrow y_if^*(x_i) \eq 1
+\stopformula
+\startformula
+\alpha_i \eq C \Leftrightarrow y_if^*(x_i) \leq 1
+\stopformula
+
+TODO
+
+\stoptext
