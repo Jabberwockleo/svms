@@ -11,10 +11,17 @@
 
 SVM solvers is typically classified into two groups
 \startitemize[-]
-\item Primal problem solvers
-\item Dual problem solvers
+\item \bold{Working on the primal problem} $L_2\text{-SVM-MFN}$, Pegasos
+\item \bold{Working on the dual problem} SMO, cutting-plane 
 \stopitemize
 
-TODO
+By approaches they can be classified into
+\startitemize 
+\item \bold{Interior Point methods (Barrier Method)} $L_2\text{-SVM-MFN}$
+\item \bold{Decomposition methods} SMO, cutting-plane
+\item \bold{Gradient based methods} Pegasos
+\stopitemize
+
+SMO is a milestone that make large scale learning possible. Cutting-plane algorithms are simple, elegant fast improvement of decomposition methods, and is effective on structured learning. $L_2\text{-SVM-MFN}$ is another famous fast solver. While gradient based methods are known to exhibit slow convergence rates, Pegasos is fast by proving that optimal $||\omega||_2 \leq 1/\sqrt{\lambda}$. 
 
 \stoptext
